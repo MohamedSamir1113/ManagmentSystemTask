@@ -20,21 +20,37 @@ The app should now be running at http://localhost:5173
 ✨ Features
 
 User List View
+
 Fetches users from the API
+
 Search functionality (by name, email, phone, birthdate)
+
 Responsive table display
+
 CRUD Operations
+
 ➕ Add New User
+
 ✏️ Update Existing User
+
 🗑 Delete User
+
 Search & Filtering
+
 Navbar search bar filters users in real time
+
 Responsive Design
+
 Collapsible sidebar for desktop
+
 Clean search bar on mobile
+
 Error Handling & Edge Cases
+
 Loading state with spinner
+
 API error handling with toasts
+
 Empty state messages
 
 🔗 API Endpoints Used (DummyJSON)
