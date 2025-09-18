@@ -5,6 +5,7 @@ This project integrates with the DummyJSON API
 🚀 Setup Instructions
 1. Clone the repo
 git clone https://github.com/MohamedSamir1113/ManagmentSystemTask.git
+
 cd ManagmentSystemTask
 
 2. Install dependencies
