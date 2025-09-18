@@ -17,7 +17,8 @@ npm run dev
 The app should now be running at http://localhost:5173
  (Vite default).
 
-✨ Features
+
+✨ Features:
 
 User List View
 
@@ -78,6 +79,5 @@ DELETE https://dummyjson.com/users/:id
 
 Frontend: React.js, React Router, Context API, React Responsive, React Toastify
 Styling: Bootstrap + CSS Modules
-API: DummyJSON
 API: DummyJSON
 
