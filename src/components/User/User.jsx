@@ -1,55 +1,87 @@
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 
-const User = ({ user, onDelete, onUpdate }) => {
-    const { email, firstName, image, phone, birthDate, id } = user
-    const [show, setShow] = useState(false);
+const User = ({ user, onDelete, onEdit }) => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { email, firstName, image, phone, birthDate, id } = user;
 
-    const handleDelete = (id) => {
-        setShow(false)
-        onDelete(id)
-    };
-    const handleClose = () => {
-        setShow(false)
-    };
-    const handleShow = () => setShow(true);
-    
-    function handleUpdate(id, userData) {
-        onUpdate(id, userData);
-    }
-    return (
-        <>
-            <tr>
-                <th ><img src={image} alt="" className="rounded rounded-1" style={{ width: "40px", height: "40px" }} /></th>
-                <th>{firstName}</th>
-                <td className="col-1">{email}</td>
-                <td>{phone}</td>
-                <td>{birthDate}</td>
+  // Handle edit button click
+  const handleEditClick = () => {
+    onEdit(user);
+  };
 
-                <td><i onClick={()=>handleUpdate(id,user)} className="fa-solid fa-pen text-warning"></i></td>
+  // Handle delete confirmation
+  const handleDeleteConfirm = () => {
+    setShowDeleteModal(false);
+    onDelete(id);
+  };
 
-                <td> <Button className="bg-transparent border-0 p-0 m-0" onClick={handleShow}>
-                    <i style={{ cursor: "pointer" }} className="fa-solid fa-trash-can text-warning"></i>
-                </Button></td>
-            </tr>
+  // Close delete modal
+  const handleCloseModal = () => {
+    setShowDeleteModal(false);
+  };
 
-            <Modal show={show} onHide={() => handleClose()}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Remove {firstName}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Are you sure you want to remove {firstName} from the list of users?</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => handleClose()}>
-                        Close
-                    </Button>
-                    <Button variant="danger" onClick={() => handleDelete(id)}>
-                        Delete
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </>
-    );
-}
+  return (
+    <>
+      <tr>
+        <td>
+          <img 
+            src={image} 
+            alt={`${firstName}'s avatar`} 
+            className="rounded" 
+            style={{ width: "40px", height: "40px" }} 
+          />
+        </td>
+        <td>{firstName}</td>
+        <td>{email}</td>
+        <td>{phone}</td>
+        <td>{birthDate}</td>
+        
+        {/* Edit button */}
+        <td>
+          <i 
+            onClick={handleEditClick} 
+            className="fa-solid fa-pen text-warning" 
+            style={{ cursor: "pointer" }}
+            title="Edit user"
+          />
+        </td>
+
+        {/* Delete button */}
+        <td>
+          <Button 
+            className="bg-transparent border-0 p-0 m-0" 
+            onClick={() => setShowDeleteModal(true)}
+          >
+            <i 
+              className="fa-solid fa-trash-can text-warning" 
+              style={{ cursor: "pointer" }}
+              title="Delete user"
+            />
+          </Button>
+        </td>
+      </tr>
+
+      {/* Delete confirmation modal */}
+      <Modal show={showDeleteModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete {firstName}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete {firstName} from the user list?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteConfirm}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+};
 
 export default User;
 

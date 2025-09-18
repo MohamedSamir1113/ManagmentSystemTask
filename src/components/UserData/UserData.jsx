@@ -5,48 +5,56 @@ import { useUser } from "../../contexts/UserContext";
 import { toast, ToastContainer } from "react-toastify";
 
 const UserData = ({ userData, setUserData }) => {
-    let { firstName, lastName, email, phone, age, id, birthDate } = userData || {};
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
-    const navigate = useNavigate();
-    
-    useEffect(() => {
-        if (userData) {
-            setValue("firstName", firstName);
-            setValue("lastName", lastName);
-            setValue("email", email);
-            setValue("phone", phone);
-            setValue("age", age);
-            setValue("birthDate", birthDate);
-        }
-       
-    }, [userData, setValue, firstName, lastName, email, phone, age, birthDate]);
-    
-    const { updateUser, addUser } = useUser();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+  const navigate = useNavigate();
+  const { updateUser, addUser } = useUser();
+  
+  // Check if we're editing an existing user or adding a new one
+  const isEditing = userData && userData.id;
+  const { firstName, lastName, email, phone, age, id, birthDate } = userData || {};
+  
+  // Populate form fields when userData changes
+  useEffect(() => {
+    if (userData) {
+      setValue("firstName", firstName || "");
+      setValue("lastName", lastName || "");
+      setValue("email", email || "");
+      setValue("phone", phone || "");
+      setValue("age", age || "");
+      setValue("birthDate", birthDate || "");
+    }
+  }, [userData, setValue]);
 
-    const onSubmit = async (data) => {
-        try {
-            if (id) {
-                await updateUser(id, data);
-                toast.success("User updated successfully! ✅");
-                setUserData({});
-                navigate("/dashboard/users");
-            } else {
-                await addUser(data);
-                toast.success("User added successfully! ✅");
-                navigate("/dashboard/users");
-            }
-        } catch (error) {
-            toast.error("Failed to save user. Please try again.");
-            console.error("Error saving user:", error);
-        }
-    };
+  // Handle form submission
+  const onSubmit = async (formData) => {
+    try {
+      if (isEditing) {
+        // Update existing user
+        await updateUser(id, formData);
+        toast.success("User updated successfully! ✅");
+      } else {
+        // Add new user
+        await addUser(formData);
+        toast.success("User added successfully! ✅");
+      }
+      
+      // Show toast for 1.5 seconds before navigating
+      setTimeout(() => {
+        setUserData({});
+        navigate("/dashboard/users");
+      }, 1500);
+    } catch (error) {
+      toast.error("Failed to save user. Please try again.");
+      console.error("Error saving user:", error);
+    }
+  };
 
     return (
         <>
             <ToastContainer theme="dark"/>
             <section className="container">
                 <div className="mb-3">
-                    {firstName ? <h3>Update User</h3> : <h3>Add User</h3>}
+                    {isEditing ? <h3>Update User</h3> : <h3>Add User</h3>}
                 </div>
                 <hr />
                 <div className="pt-4 mt-4 d-flex justify-content-center align-items-center ">
@@ -133,7 +141,7 @@ const UserData = ({ userData, setUserData }) => {
                         </div>
                         <div className="d-flex my-3 justify-content-center">
                             <button type="submit" className="btn btn-warning w-50 text-white">
-                                {firstName?"Update":"Save"}
+                                {isEditing ? "Update" : "Save"}
                             </button>
                         </div>
                     </form>

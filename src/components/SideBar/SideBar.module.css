@@ -1,5 +1,49 @@
-.sidebar-container
-{
+.sidebar-container {
     background-color: #F2EAE1;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
 
+/* Ensure the sidebar takes full height */
+.sidebar-container .pro-sidebar {
+    height: 100vh !important;
+}
+
+/* Menu styling for full height */
+.sidebar-container .pro-sidebar .pro-menu {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Menu items container */
+.sidebar-container .pro-sidebar .pro-menu > ul {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Collapse button styling */
+.sidebar-container .pro-sidebar .pro-menu .collapse-button {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sidebar-container .pro-sidebar .pro-menu .collapse-button:hover {
+    transform: scale(1.1);
+}
+
+/* Ensure proper spacing when collapsed */
+.sidebar-container .pro-sidebar.collapsed .pro-menu {
+    padding: 0.5rem;
+}
+
+/* Profile image sizing when collapsed */
+.sidebar-container .pro-sidebar.collapsed .pro-menu img {
+    width: 40px;
+    height: 40px;
 }

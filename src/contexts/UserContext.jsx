@@ -1,64 +1,107 @@
 import { createContext, useContext, useState } from "react";
-import axios from "axios";
+import * as api from "../services/api";
 
-const UserContext = createContext(undefined);
+const UserContext = createContext();
 
-function UserProvider({ children }) {
-    const [users, setUsers] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
+export function UserProvider({ children }) {
+  // Simple state management instead of complex reducer
+  const [users, setUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 10; // Show 10 users per page
 
-    const updateUser = async (id, data) => {
-        try {
-            const res = await axios.put(`https://dummyjson.com/users/${id}`, data);
-            console.log(res.data);
-            setUsers(users => users.map(user => (user.id === id ? { ...user, ...res.data } : user)));
-            return res.data;
-        } catch (error) {
-            console.error("Error updating user:", error);
-            throw error;
-        }
-    };
+  // Load all users from API
+  const loadUsers = async () => {
+    const usersData = await api.fetchUsers();
+    setUsers(usersData);
+  };
 
-    const addUser = async (data) => {
-        try {
-            const res = await axios.post(`https://dummyjson.com/users/add`, data);
-            console.log(res.data);
-            setUsers((prevUsers) => [...prevUsers, res.data]);
-            return res.data;
-        } catch (error) {
-            console.error("Error adding user:", error);
-            throw error;
-        }
-    };
+  // Add a new user
+  const addUser = async (userData) => {
+    const newUser = await api.addUser(userData);
+    setUsers(prevUsers => [...prevUsers, newUser]);
+    return newUser;
+  };
 
-    const deleteUser = async (id) => {
-        try {
-            const res = await axios.delete(`https://dummyjson.com/users/${id}`);
-            setUsers(users => users.filter((user) => user.id !== id));
-            console.log(res.data);
-            return res.data;
-        } catch (error) {
-            console.error("Error deleting user:", error);
-            throw error;
-        }
-    };
-
-    return (
-        <>
-            <UserContext.Provider value={{ users, setUsers, updateUser, addUser, deleteUser, searchQuery, setSearchQuery }}>
-                {children}
-            </UserContext.Provider>
-        </>
+  // Update an existing user
+  const updateUser = async (userId, userData) => {
+    const updatedUser = await api.updateUser(userId, userData);
+    setUsers(prevUsers => 
+      prevUsers.map(user => user.id === userId ? updatedUser : user)
     );
+    return updatedUser;
+  };
+
+  // Delete a user
+  const deleteUser = async (userId) => {
+    await api.deleteUser(userId);
+    setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
+  };
+
+  // Get paginated users based on current page and search query
+  const getPaginatedUsers = () => {
+    let filteredUsers = users;
+    
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filteredUsers = users.filter(user => {
+        const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+        const email = (user.email || "").toLowerCase();
+        const phone = (user.phone || "").toLowerCase();
+        const birthDate = (user.birthDate || "").toLowerCase();
+        
+        return fullName.includes(query) || 
+               email.includes(query) || 
+               phone.includes(query) || 
+               birthDate.includes(query);
+      });
+    }
+    
+    // Calculate pagination
+    const startIndex = (currentPage - 1) * usersPerPage;
+    const endIndex = startIndex + usersPerPage;
+    
+    return {
+      users: filteredUsers.slice(startIndex, endIndex),
+      totalUsers: filteredUsers.length,
+      totalPages: Math.ceil(filteredUsers.length / usersPerPage),
+      currentPage,
+      usersPerPage
+    };
+  };
+
+  // Reset to first page when search query changes
+  const setSearchQueryWithReset = (query) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+  };
+
+  return (
+    <UserContext.Provider
+      value={{
+        users,
+        searchQuery,
+        setSearchQuery: setSearchQueryWithReset,
+        currentPage,
+        setCurrentPage,
+        usersPerPage,
+        loadUsers,
+        addUser,
+        updateUser,
+        deleteUser,
+        getPaginatedUsers,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 }
 
-function useUser() {
-    const context = useContext(UserContext);
-    if (context === undefined) throw new Error("context out of provider");
-    return context;
+export function useUser() {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUser must be used inside UserProvider");
+  }
+  return context;
 }
-
-// eslint-disable-next-line react-refresh/only-export-components
-export { UserProvider, useUser };
-
-

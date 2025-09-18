@@ -1,45 +1,37 @@
 import { useMediaQuery } from "react-responsive";
 import { useUser } from "../../contexts/UserContext";
 
+// Navigation bar component with search functionality
 const NavBar = ({ setIsCollapsed, isCollapsed }) => {
-    const isScreenSmall = useMediaQuery({ query: "(max-width: 678px)" });
-    const { searchQuery, setSearchQuery } = useUser();
-    return (
-        <>
-            {isScreenSmall ?
-                <div className="bg-white py-2 mb-3 d-flex align-items-center justify-content-end">
+  const isSmall = useMediaQuery({ query: "(max-width: 678px)" });
+  const { searchQuery, setSearchQuery } = useUser();
 
-                    <div className="d-flex align-items-center me-5">
-                        <input
-                            type="text"
-                            className="form-control me-1"
-                            placeholder="Search"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                        <i className="fa-regular text-muted fa-bell"></i>
-                    </div>
+  // Search bar component
+  const SearchBar = (
+    <div className="d-flex align-items-center me-5">
+      <input
+        type="text"
+        className="form-control me-1"
+        placeholder="Search users..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+      <i className="fa-regular text-muted fa-bell"></i>
+    </div>
+  );
 
-                </div>
-                :
-                <div className="bg-white py-2 mb-3 d-flex align-items-center justify-content-between">
-                    {isCollapsed ? <i onClick={() => setIsCollapsed(!isCollapsed)} style={{cursor:"pointer"}} className="fa-regular fa-circle-left px-5"></i> : <i onClick={() => setIsCollapsed(!isCollapsed)} style={{cursor:"pointer"}} className="fa-regular fa-circle-xmark px-5"></i>}
-                    <div className="d-flex align-items-center me-5">
-                        <input
-                            type="text"
-                            className="form-control me-1"
-                            placeholder="Search"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                        <i className="fa-regular text-muted fa-bell"></i>
-                    </div>
-                </div>
-            }
-        </>
-    )
-}
+  return (
+    <div className="bg-white py-2 mb-3 d-flex align-items-center justify-content-between">
+      {!isSmall && (
+        <i
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          style={{ cursor: "pointer" }}
+          className={`fa-solid px-5 ${isCollapsed ? "fa-circle-right" : "fa-circle-left"}`}
+        ></i>
+      )}
+      {SearchBar}
+    </div>
+  );
+};
 
 export default NavBar;
-
-

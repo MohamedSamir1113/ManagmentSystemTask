@@ -1,0 +1,95 @@
+/* Mobile NavBar Styles */
+.mobileNavBar {
+  padding: 0.75rem 1rem;
+}
+
+.mobileMenuButton {
+  font-size: 1.2rem;
+  color: #6c757d;
+  transition: color 0.3s ease;
+}
+
+.mobileMenuButton:hover {
+  color: #FEAF00;
+}
+
+.mobileSearchToggle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  transition: color 0.3s ease;
+}
+
+.mobileSearchToggle:hover {
+  color: #FEAF00;
+}
+
+.mobileSearchBar {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.mobileSearchInput {
+  border: none;
+  background: transparent;
+  font-size: 0.9rem;
+}
+
+.mobileSearchInput:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.mobileTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+/* Desktop NavBar Styles */
+.desktopNavBar {
+  padding: 0.75rem 1.5rem;
+}
+
+.desktopCollapseButton {
+  font-size: 1.3rem;
+  color: #6c757d;
+  transition: all 0.3s ease;
+}
+
+.desktopCollapseButton:hover {
+  color: #FEAF00;
+  transform: scale(1.1);
+}
+
+.desktopSearchBar {
+  max-width: 300px;
+}
+
+.desktopSearchInput {
+  border-radius: 20px;
+  border: 1px solid #dee2e6;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.desktopSearchInput:focus {
+  border-color: #FEAF00;
+  box-shadow: 0 0 0 0.2rem rgba(254, 175, 0, 0.25);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .mobileNavBar {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .mobileTitle {
+    font-size: 0.9rem;
+  }
+  
+  .mobileMenuButton {
+    font-size: 1.1rem;
+  }
+}

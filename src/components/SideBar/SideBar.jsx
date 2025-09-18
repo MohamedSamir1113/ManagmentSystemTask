@@ -60,33 +60,47 @@ const SideBar = ({ setIsCollapsed, isCollapsed }) => {
           </div>
         </div>
       ) : (
-        <div className={`${styles['sidebar-container']} vh-100`}>
+        <div className={styles['sidebar-container']}>
           <Sidebar collapsed={isCollapsed}>
-            <Menu style={{ backgroundColor: "#F2EAE1" }}>
-              <div className="text-center pt-5">
+            <Menu style={{ backgroundColor: "#F2EAE1", height: "100vh", display: "flex", flexDirection: "column" }}>
+              {/* Collapse Button */}
+              <div className="text-center pt-3">
+                <i 
+                  onClick={() => setIsCollapsed(!isCollapsed)} 
+                  className={`fa-solid ${isCollapsed ? "fa-circle-right" : "fa-circle-left"} px-3`}
+                  style={{ cursor: "pointer", fontSize: "1.2rem" }}
+                ></i>
+              </div>
+
+              {/* Profile Section */}
+              <div className="text-center pt-3">
                 <img src={loggedUser?.image} className={`${isCollapsed && "w-100"}`} style={{ borderRadius: "50%", backgroundColor: "transparent" }} alt="Profile" />
                 {!isCollapsed && <h4>{loggedUser?.username}</h4>}
               </div>
 
-              <div className="py-5">
-                <MenuItem style={getMenuItemStyle("/dashboard/home")} icon={<i className="fa-solid fa-home"></i>} component={<Link to="home" />}>
-                  Home
-                </MenuItem>
-                <MenuItem style={getMenuItemStyle("/dashboard/users")} icon={<i className="fa fa-users"></i>} component={<Link to="users" />}>
-                  Users
-                </MenuItem>
-                <MenuItem style={getMenuItemStyle("/dashboard/user-data")} icon={<i className="fa fa-user-plus"></i>} component={<Link to="user-data" />}>
-                User Data
-                </MenuItem>
-                <MenuItem style={getMenuItemStyle("/dashboard/profile")} icon={<i className="fa-solid fa-id-card"></i>} component={<Link to="profile" />}>
-                  Profile
-                </MenuItem>
-              </div>
+              {/* Navigation Menu - Takes up remaining space */}
+              <div className="flex-grow-1 d-flex flex-column justify-content-between py-5">
+                <div>
+                  <MenuItem style={getMenuItemStyle("/dashboard/home")} icon={<i className="fa-solid fa-home"></i>} component={<Link to="home" />}>
+                    Home
+                  </MenuItem>
+                  <MenuItem style={getMenuItemStyle("/dashboard/users")} icon={<i className="fa fa-users"></i>} component={<Link to="users" />}>
+                    Users
+                  </MenuItem>
+                  <MenuItem style={getMenuItemStyle("/dashboard/user-data")} icon={<i className="fa fa-user-plus"></i>} component={<Link to="user-data" />}>
+                    User Data
+                  </MenuItem>
+                  <MenuItem style={getMenuItemStyle("/dashboard/profile")} icon={<i className="fa-solid fa-id-card"></i>} component={<Link to="profile" />}>
+                    Profile
+                  </MenuItem>
+                </div>
 
-              <div>
-                <MenuItem onClick={()=>localStorage.setItem("userToken","")} style={getMenuItemStyle("/")} icon={<i className="fa-solid fa-right-from-bracket"></i>} component={<Link to="/" />}>
-                  Log Out
-                </MenuItem>
+                {/* Logout at bottom */}
+                <div className="mt-auto">
+                  <MenuItem onClick={()=>localStorage.setItem("userToken","")} style={getMenuItemStyle("/")} icon={<i className="fa-solid fa-right-from-bracket"></i>} component={<Link to="/" />}>
+                    Log Out
+                  </MenuItem>
+                </div>
               </div>
             </Menu>
           </Sidebar>

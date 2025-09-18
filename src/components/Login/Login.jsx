@@ -11,6 +11,7 @@ const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm()
     const {saveUserData}=useAuth()
     const navigate = useNavigate()
+    
     const onSubmit = async (data) => {
         try {
             const res = await axios.post(`https://dummyjson.com/auth/login`, data)
