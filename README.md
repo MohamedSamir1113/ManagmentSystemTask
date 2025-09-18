@@ -68,5 +68,7 @@ npm install
 # 3. Start development server
 npm run dev
 
+# 3. username:emilys
+password:emilyspass
 # 4. Open in browser
 #    Usually at http://localhost:5173 (or whatever Vite gives you)
